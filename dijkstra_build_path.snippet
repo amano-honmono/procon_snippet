@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>dijkstra_build_path</Title>
+      <Shortcut>DijkstraBuildPath</Shortcut>
+		</Header>
+		<Snippet>
+
+			<Code Language="cpp">
+  <![CDATA[void dijkstra(Graph &g, int s, Array &d, vi &prev)
+{
+	d.assign(g.size(), INF);
+	prev.assign(g.size(), -1);
+	d[s] = 0;
+	typedef pair<Weight, int> P;
+	priority_queue<P, vector<P>, greater<P>> que;
+	que.push(P(0, s));
+	while (!que.empty())
+	{
+		Weight dist = que.top().first;
+		int v = que.top().second;
+		que.pop();
+		if (d[v] < dist) continue;
+		REP(i, g[v].size())
+		{
+			Edge e = g[v][i];
+			if (d[e.to] > d[v] + e.cost)
+			{
+				d[e.to] = d[v] + e.cost;
+				prev[e.to] = v;
+				que.push(P(d[e.to], e.to));
+			}
+		}
+	}
+}
+
+vi build_path(const vi &prev, int t)
+{
+	vi path;
+	for (int i = t; i >= 0; i = prev[i]) path.push_back(i);
+	reverse(ALL(path));
+	return path;
+}
+$end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Dice</Title>
+			<Shortcut>dice</Shortcut>
+		</Header>
+    <Snippet>
+
+      <Code Language="cpp">
+        <![CDATA[struct Dice
+{
+private:
+	int top, right, front;
+public:
+	Dice() :top(1), right(2), front(3) {};
+	Dice(int t, int r, int f) :top(t), right(r), front(f) {};
+	void set(int t, int r, int f) { top = t, right = r, front = f; }
+	int get_top() { return top; }
+	int get_bottom() { return 7-top; }
+	int get_right() { return right; }
+	int get_left() { return 7 - right; }
+	int get_front() { return front; }
+	int get_back() { return 7 - front; }
+	void to_front() { swap(front, top); top = 7 - top; }
+	void to_back() { REP(i, 3) to_front(); }
+	void to_right() { swap(top, right); top = 7 - top; }
+	void to_left() { REP(i, 3) to_right(); }
+	void to_clock() { swap(front, right); right = 7 - right; }
+	void to_counter() { REP(i, 3) to_clock(); }
+};
+
+      $end$ ]]>
+      </Code>
+    </Snippet>
+	</CodeSnippet>
+</CodeSnippets>

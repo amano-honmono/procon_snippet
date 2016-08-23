@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title> output_checker</Title>
+			<Shortcut> OutputChecker</Shortcut>
+		</Header>
+		<Snippet>
+			<Code Language="cpp">
+        <![CDATA[	vs v;
+	string s;
+	while (cin >> s) v.push_back(s);
+	int n = v.size() / 2;
+	REP(i, n)
+	{
+		if (v[i] != v[i + n]) cout << i << endl;
+	}
+      $end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

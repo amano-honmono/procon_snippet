@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>geometry_template</Title>
+			<Shortcut>GeometryTemplate</Shortcut>
+		</Header>
+		<Snippet>
+
+			<Code Language="cpp">
+        <![CDATA[typedef long double ld;
+const ld PI = acos(-1.0);
+bool eq(ld a, ld b) { return abs(a - b) < EPS; }
+typedef complex<ld> Point;
+typedef vector<Point> Polygon;
+
+namespace std
+{
+	bool operator < (const Point& a, const Point& b)
+	{
+		return real(a) != real(b) ? real(a) < real(b) : imag(a) < imag(b);
+	}
+}
+
+struct Line
+{
+	Point a, b;
+	Line(Point p, Point q):a(p), b(q) {};
+	Line(ld x1, ld y1, ld x2, ld y2):a(Point(x1, y1)), b(Point(x2, y2)) {};
+};
+
+struct Circle
+{
+	Point p; ld r;
+	Circle(Point a, ld b):p(a), r(b) {};
+};
+
+ld dot(Point a, Point b)
+{
+	return real(conj(a)*b);
+}
+
+ld cross(Point a, Point b)
+{
+	return imag(conj(a)*b);
+}
+
+int ccw(Point a, Point b, Point c)
+{
+	b -= a; c -= a;
+	if(cross(b, c) > EPS) return 1;    //counter cloclwise
+	if(cross(b, c) < -EPS) return -1;  //cloclwise
+	if(dot(b, c) < 0) return 2;        //c--a--b on line 
+	if(norm(b) < norm(c)) return -2;   //a--b--c on line
+	return 0;                           //a--c--b on line
+}
+
+bool isis_ll(Line l, Line m)
+{
+	return abs(cross(l.b - l.a, m.b - m.a)) > EPS;
+}
+
+bool isis_ls(Line l, Line s)
+{
+	return cross(l.b - l.a, s.a - l.a)*cross(l.b - l.a, s.b - l.a) < EPS;
+}
+
+bool isis_ss(Line s, Line t)
+{
+	return (ccw(s.a, s.b, t.a)*ccw(s.a, s.b, t.b) <= 0 &&
+			ccw(t.a, t.b, s.a)*ccw(t.a, t.b, s.b) <= 0);
+}
+
+bool isis_lp(Line l, Point p)
+{
+	return (abs(cross(l.b - p, l.a - p)) < EPS);
+}
+
+bool isis_sp(Line s, Point p)
+{
+	return (abs(s.a - p) + abs(s.b - p) - abs(s.b - s.a)) < EPS;
+}
+
+Point projection(Line l, Point p)
+{
+	Point base = l.b - l.a;
+	ld r = dot(p - l.a, base) / norm(base);
+	return l.a + base*r;
+}
+
+Point mirror(Line l, Point p)
+{
+	return Point(2,0)*projection(l, p) - p;
+}
+
+ld dist_lp(Line l, Point p)
+{
+	return abs(p - projection(l, p));
+}
+
+ld dist_ll(Line l, Line m)
+{
+	return isis_ll(l, m) ? 0 : dist_lp(l, m.a);
+}
+
+ld dist_ls(Line l, Line s)
+{
+	if(isis_ls(l, s)) return 0;
+	return min(dist_lp(l, s.a), dist_lp(l, s.b));
+}
+
+ld dist_sp(Line s, Point p)
+{
+	Point r = projection(s, p);
+	if(isis_sp(s, r)) return abs(r - p);
+	return min(abs(s.a - p), abs(s.b - p));
+}
+
+ld dist_ss(Line s, Line t)
+{
+	if(isis_ss(s, t)) return 0;
+	return min(min(dist_sp(s, t.a), dist_sp(s, t.b)), min(dist_sp(t, s.a), dist_sp(t, s.b)));
+}
+
+Point is_ll(Line s, Line t)
+{
+	ld a = cross(s.b - s.a, t.b - t.a);
+	ld b = cross(s.b - s.a, s.b - t.a);
+	return t.a + b / a*(t.b - t.a);
+}
+
+vector<Point> is_cc(Circle c1, Circle c2)
+{
+	vector<Point> res;
+	ld d = abs(c1.p - c2.p);
+	ld rc = (d*d + pow(c1.r, 2) - pow(c2.r, 2)) / (2 * d);
+	ld dfr = pow(c1.r, 2) - rc*rc;
+	if(abs(dfr) < EPS) dfr = 0;
+	if(dfr < 0.0) return res;
+	ld rs = sqrt(dfr);
+	Point diff = (c2.p - c1.p) / d;
+	res.push_back(c1.p + diff*Point(rc, rs));
+	if(dfr != 0.0) res.push_back(c1.p + diff*Point(rc, -rs));
+	return res;
+}
+
+int isis_cc(Circle c1, Circle c2)
+{
+	ld d = abs(c1.p - c2.p);
+	if (d - c1.r - c2.r > EPS) return -2; //separate
+	if (abs(d - c1.r - c2.r) < EPS) return -1; //circumscribe
+	if (c1.r < c2.r) swap(c1, c2);
+	if (abs(d - c1.r + c2.r) < EPS) return 1;//inscribe
+	if (c1.r - d - c2.r > EPS) return 2;//involve
+	else return 0;//intersect
+}
+
+bool isis_cl(Circle c, Line l)
+{
+	ld d = dist_lp(l, c.p);
+	return d - c.r < -EPS;
+}
+
+vector<Point> is_cl(Circle c, Line l)
+{
+	vector<Point> res;
+	ld d = dist_lp(l, c.p);
+	if(d > c.r + EPS) return res;
+	ld len = (d > c.r) ? 0 : sqrt(c.r*c.r - d*d);
+	Point nor = (l.a - l.b) / abs(l.a - l.b);
+	res.push_back(projection(l, c.p) + len*nor);
+	if(abs(len) > EPS) res.push_back(projection(l, c.p - len*nor));
+	return res;
+}
+
+vector<Point> is_cs(Circle c, Line s)
+{
+	vector<Point> v = is_cl(c, s), res;
+	REP(i, v.size())
+	{
+		if(ccw(s.a, v[i], s.b) == -2) res.push_back(v[i]);
+	}
+	return res;
+}
+
+vector<Line> tangent_cp(Circle c, Point p)
+{
+	vector<Line> res;
+	Point v = c.p - p;
+	ld d = abs(v);
+	ld l = sqrt(norm(v) - c.r * c.r);
+	if(isnan(l)) { return res; }
+	Point v1 = v * Point(l / d, c.r / d);
+	Point v2 = v * Point(l / d, -c.r / d);
+	res.push_back(Line(p, p + v1));
+	if(l < EPS) return res;
+	res.push_back(Line(p, p + v2));
+	return res;
+}
+
+vector<Line> tangent_cc(Circle c1, Circle c2)
+{
+	vector<Line> res;
+	if(abs(c1.p - c2.p) - (c1.r + c2.r) > -EPS)
+	{
+		Point center = (c1.p * c2.r + c2.p * c1.r) / (c1.r + c2.r);
+		res = tangent_cp(c1, center);
+	}
+	if(abs(c1.r - c2.r) > EPS)
+	{
+		Point out = (-c1.p * c2.r + c2.p * c1.r) / (c1.r - c2.r);
+		vector<Line> nres = tangent_cp(c1, out);
+		res.insert(res.end(), nres.begin(), nres.end());
+	}
+	else
+	{
+		Point v = c2.p - c1.p; v /= abs(v);
+		Point q1 = c1.p + v * Point(0, 1) * c1.r;
+		Point q2 = c1.p + v * Point(0, -1) * c1.r;
+		res.push_back(Line(q1, q1 + v));
+		res.push_back(Line(q2, q2 + v));
+	}
+	return res;
+}
+      $end$ ]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

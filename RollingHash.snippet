@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>RollingHash</Title>
+			<Shortcut>rollinghash</Shortcut>
+		</Header>
+		<Snippet>
+
+			<Code Language="cpp">
+        <![CDATA[const ll mod[] = { 999999937, 1000000007 }, base = 10000103;
+
+struct RollingHash
+{
+	int n;
+	vector<ll> hs[2], pw[2];
+	RollingHash() {};
+	RollingHash(const string& s)
+	{
+		n = s.size();
+		REP(i, 2)
+		{
+			hs[i].assign(n + 1, 0);
+			pw[i].assign(n + 1, 0);
+			hs[i][0] = 0;
+			pw[i][0] = 1;
+			REP(j, n)
+			{
+				pw[i][j + 1] = pw[i][j] * base%mod[i];
+				hs[i][j + 1] = (hs[i][j] * base + s[j]) % mod[i];
+			}
+		}
+	}
+
+	ll hash(int l, int r, int i)
+	{
+		return ((hs[i][r] - hs[i][l] * pw[i][r - l]) % mod[i] + mod[i]) % mod[i];
+	}
+
+	bool match(int l1, int r1, int l2, int r2)
+	{
+		return (hash(l1, r1, 0) == hash(l2, r2, 0)) && (hash(l1, r1, 1) == hash(l2, r2, 1));
+	}
+};
+      $end$ ]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>gauss_jordan</Title>
+			<Shortcut>GaussJordan</Shortcut>
+		</Header>
+		<Snippet>
+      <Declarations>
+        <Literal>
+          <ID>a</ID>
+          <Default>a</Default>
+        </Literal>
+      </Declarations>
+
+			<Code Language="cpp">
+        <![CDATA[Array gauss_jordan(const Matrix& A, const Array& b)
+{
+	int n = A.size();
+	Matrix B(n, Array(n + 1));
+	REP(i, n)REP(j, n) B[i][j] = A[i][j];
+	REP(i, n) B[i][n] = b[i];
+	REP(i, n)
+	{
+		int pivot = i;
+		FOR(j, i, n)
+		{
+			if (abs(B[j][i]) > abs(B[pivot][i])) pivot = j;
+		}
+		swap(B[i], B[pivot]);
+
+		if (abs(B[i][i]) < EPS) return Array();
+		FOR(j, i + 1, n + 1) B[i][j] /= B[i][i];
+		REP(j, n)
+		{
+			if (i != j)
+			{
+				FOR(k, i + 1, n + 1) B[j][k] -= B[j][i] * B[i][k];
+			}
+		}
+	}
+	Array x(n);
+	REP(i, n) x[i] = B[i][n];
+	return x;
+}
+      $end$ ]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

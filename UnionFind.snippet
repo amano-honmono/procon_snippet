@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>union_find</Title>
+			<Shortcut>UnionFind</Shortcut>
+		</Header>
+		<Snippet>
+
+			<Code Language="cpp">
+        <![CDATA[struct UnionFind
+{
+	vector<int> par;
+	UnionFind(int n) :par(n, -1) {}
+	int find(int x) { return par[x] < 0 ? x : par[x] = find(par[x]); }
+	void unite(int x, int y)
+	{
+		x = find(x); y = find(y);
+		if (x == y) return;
+		if (par[y] < par[x]) swap(x, y);
+		if (par[x] == par[y]) par[x]--;
+		par[y] = x;
+		if (find(x) != find(y)) par[find(y)] = x;
+	}
+	int count()
+	{
+		int cnt = 0;
+		REP(i, par.size()) if (par[i] < 0) cnt++;
+		return cnt;
+	}
+	bool same(int x, int y)
+	{
+		return find(x) == find(y);
+	}	
+};
+      $end$ ]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

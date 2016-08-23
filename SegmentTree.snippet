@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title> SegmentTree</Title>
+			<Shortcut> segmenttree</Shortcut>
+		</Header>
+		<Snippet>
+			<Code Language="cpp">
+        <![CDATA[struct Data
+{
+	int num;
+	Data() :num(INF) {};
+	Data(int n) :num(n) {};
+};
+
+struct SegmentTree
+{
+	int n; vector<Data> data;
+	SegmentTree(int N)
+	{
+		n = 1;
+		while (n < N) n *= 2;
+		data.resize(2 * n);
+	}
+private:
+	Data sub(int left, int right, int node, int nleft, int nright)
+	{
+		if (nright <= left || right <= nleft) return Data();
+		if (left <= nleft && nright <= right) return data[node];
+		Data vl = sub(left, right, node * 2 + 1, nleft, (nleft + nright) / 2);
+		Data vr = sub(left, right, node * 2 + 2, (nleft + nright) / 2, nright);
+		return min(vl.num, vr.num);
+	}
+
+public:
+	void update(int pos, Data value)
+	{
+		pos += n - 1;
+		data[pos] = value;
+		while (pos > 0)
+		{
+			pos = (pos - 1) / 2;
+			data[pos] = min(data[pos * 2 + 1].num, data[pos * 2 + 2].num);
+		}
+	}
+	Data min_query(int left, int right)
+	{
+		return sub(left, right, 0, 0, n);
+	}
+};
+      $end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

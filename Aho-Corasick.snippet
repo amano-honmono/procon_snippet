@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title> Aho-Corasick</Title>
+			<Shortcut> AhoCorasick</Shortcut>
+		</Header>
+		<Snippet>
+      <Declarations>
+        <Literal>
+          <ID>dist</ID>
+          <Default>dist</Default>
+        </Literal>
+        <Literal>
+          <ID>V</ID>
+          <Default>n</Default>
+        </Literal>
+      </Declarations>
+			<Code Language="cpp">
+        <![CDATA[struct PMA
+{
+	PMA *next[256];
+	vi matched;
+	PMA() { memset(next, 0, sizeof(next)); }
+};
+
+PMA *buildPMA(const vector<string> pattern)
+{
+	PMA *root = new PMA;
+	REP(i, pattern.size())
+	{
+		PMA *tmp = root;
+		REP(j, pattern[i].size())
+		{
+			if (tmp->next[(int)pattern[i][j]] == 0)
+			{
+				tmp->next[(int)pattern[i][j]] = new PMA;
+			}
+			tmp = tmp->next[(int)pattern[i][j]];
+		}
+		tmp->matched.push_back(i);
+	}
+
+	queue<PMA*> que;
+	FOR(i, 1, 256)
+	{
+		if (!root->next[i]) root->next[i] = root;
+		else
+		{
+			root->next[i]->next[0] = root;
+			que.push(root->next[i]);
+		}
+	}
+	while (que.size())
+	{
+		PMA *tmp = que.front(); que.pop();
+		FOR(i, 1, 256)
+		{
+			if (tmp->next[i])
+			{
+				que.push(tmp->next[i]);
+				PMA *r = tmp->next[0];
+				while (!r->next[i]) r = r->next[0];
+				tmp->next[i]->next[0] = r->next[i];
+			}
+		}
+	}
+	return root;
+}
+
+void match(PMA* pma, const string s, vector<bool>& res)
+{
+	REP(i, s.size())
+	{
+		int c = s[i];
+		while (!pma->next[c]) pma = pma->next[0];
+		pma = pma->next[c];
+		REP(j, pma->matched.size()) res[pma->matched[j]] = true;
+	}
+}
+      $end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

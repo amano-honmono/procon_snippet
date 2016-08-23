@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>ford_fulkerson</Title>
+			<Shortcut>FordFulkerson</Shortcut>
+		</Header>
+		<Snippet>
+
+			<Code Language="cpp">
+        <![CDATA[Flow dfs(Graph &g, vector<bool> &used, int v, int t, Flow f)
+{
+	if (v == t) return f;
+	used[v] = true;
+	for (Edge& e : g[v])
+	{
+		if (!used[e.dest] && e.cap > 0)
+		{
+			Flow d = dfs(g, used, e.dest, t, min(f, e.cap));
+			if (d > 0)
+			{
+				e.cap -= d;
+				g[e.dest][e.rev].cap += d;
+				return d;
+			}
+		}
+	}
+	return 0;
+}
+
+Flow ford_fulkerson(Graph &g, int s, int t)
+{
+	Flow flow = 0;
+	for (;;)
+	{
+		vector<bool> used(g.size(), false);
+		Flow f = dfs(g, used, s, t, INF);
+		if (f == 0) return flow;
+		flow += f;
+	}
+}
+$end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

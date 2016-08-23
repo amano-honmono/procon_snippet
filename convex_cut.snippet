@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>convex_cut</Title>
+			<Shortcut>ConvexCut</Shortcut>
+		</Header>
+		<Snippet>
+
+			<Code Language="cpp">
+        <![CDATA[Polygon ConvexCut(const Polygon& g, const Line l)
+{
+	Polygon res;
+	REP(i, g.size())
+	{
+		Point a = g[i], b = g[(i + 1) % g.size()];
+		if (ccw(l.a, l.b, a) != -1) res.push_back(a);
+		if (ccw(l.a, l.b, a)*ccw(l.a, l.b, b) < 0) res.push_back(is_ll(Line(a, b), l));
+	}
+	return res;
+}
+      $end$ ]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

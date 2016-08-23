@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title> SuffixArray</Title>
+			<Shortcut> suffixarray</Shortcut>
+		</Header>
+		<Snippet>
+      <Declarations>
+        <Literal>
+          <ID>dist</ID>
+          <Default>dist</Default>
+        </Literal>
+        <Literal>
+          <ID>V</ID>
+          <Default>n</Default>
+        </Literal>
+      </Declarations>
+			<Code Language="cpp">
+        <![CDATA[typedef vector<int> SuffixArray;
+int n, k;
+vi rnk, tmp;
+
+bool comp_sa(const int i, const int j)
+{
+	if (rnk[i] != rnk[j]) return rnk[i] < rnk[j];
+	else
+	{
+		int ri = i + k <= n ? rnk[i + k] : -1;
+		int rj = j + k <= n ? rnk[j + k] : -1;
+		return ri < rj;
+	}
+}
+
+SuffixArray construct_sa(const string& s)
+{
+	n = s.size();
+	SuffixArray sa(n + 1);
+	rnk.resize(n + 1), tmp.resize(n + 1);
+	REP(i, n + 1)
+	{
+		sa[i] = i;
+		if (i == n) rnk[i] = -1;
+		else rnk[i] = s[i];
+	}
+	for (k = 1; k <= n; k *= 2)
+	{
+		sort(ALL(sa), comp_sa);
+		tmp[sa[0]] = 0;
+		REP(i, n) tmp[sa[i + 1]] = tmp[sa[i]] + (comp_sa(sa[i], sa[i + 1]) ? 1 : 0);
+		rnk = tmp;
+	}
+	return sa;
+}
+
+bool search(const string& s, const string& t, const SuffixArray& sa)
+{
+	int l = 0, r = s.size();
+	while (r - l > 1) 
+	{
+		int mid = (r + l) / 2;
+		if (s.compare(sa[mid], t.size(), t) < 0) l = mid;
+		else r = mid;
+	}
+	return s.compare(sa[r], t.size(), t) == 0;
+}
+
+int lower_bound(const string& s, const string& t, const SuffixArray& sa)
+{
+	int l = 0, r = s.size() + 1;
+	while (r - l > 1)
+	{
+		int mid = (r + l) / 2;
+		if (s.compare(sa[mid], t.size(), t) < 0) l = mid;
+		else r = mid;
+	}
+	return r;
+}
+
+int upper_bound(const string& s, const string& t, const SuffixArray& sa)
+{
+	int l = 0, r = s.size() + 1;
+	while (r - l > 1)
+	{
+		int mid = (r + l) / 2;
+		if (s.compare(sa[mid], t.size(), t) <= 0) l = mid;
+		else r = mid;
+	}
+	return r;
+}
+      $end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

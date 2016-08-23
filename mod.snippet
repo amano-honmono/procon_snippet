@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Mod</Title>
+			<Shortcut>Mod</Shortcut>
+		</Header>
+		<Snippet>
+      <Declarations>
+        <Literal>
+          <ID>a</ID>
+          <Default>a</Default>
+        </Literal>
+      </Declarations>
+
+			<Code Language="cpp">
+        <![CDATA[const ll mod = 1000000007;
+struct Mod
+{
+	ll num;
+	Mod() : num(0) { ; }
+	Mod(ll n) : num(n % mod) { ; }
+	operator ll() { return num; }
+};
+
+
+Mod operator+(Mod a, Mod b) { return Mod((a.num + b.num) % mod); }
+Mod operator-(Mod a, Mod b) { return Mod((mod + a.num - b.num) % mod); }
+Mod operator*(Mod a, Mod b) { return Mod(((long long)a.num * b.num) % mod); }
+Mod operator+=(Mod &a, Mod b) { return a = a + b; }
+Mod operator-=(Mod &a, Mod b) { return a = a - b; }
+Mod operator^(Mod a, ll n)
+{
+	if (n == 0) return Mod(1);
+	Mod res = (a * a) ^ (n / 2);
+	if (n % 2) res = res * a;
+	return res;
+}
+Mod inv(Mod a) { return a ^ (mod - 2); }
+Mod operator/(Mod a, Mod b) { return a * inv(b); }
+
+Mod fact(Mod n)
+{
+	if (n < 0) assert(false);
+	if (n == 0 || n == 1) return 1;
+	else return n*fact(n - (Mod)1);
+}
+
+Mod nPk(Mod n, Mod k)
+{
+	if (n < 0 || k < 0 || n < k) assert(false);
+	return fact(n) / fact(k);
+}
+
+Mod nCk(Mod n, Mod k)
+{
+	if (n < 0 || k < 0 || n < k) assert(false);
+	return nPk(n, k) / fact(n - k);
+}
+
+Mod nHk(Mod n, Mod k)
+{
+	if (n < 0 || k < 0 || n < k) assert(false);
+	return nCk(n + k - (Mod)1, k);
+}
+      $end$ ]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

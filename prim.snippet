@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>prim</Title>
+			<Shortcut>Prim</Shortcut>
+		</Header>
+		<Snippet>
+
+			<Code Language="cpp">
+        <![CDATA[pair<int, Edges> prim(Graph g)
+{
+	vector<bool> used(g.size());
+	Edges res;
+	int sum = 0;
+
+	priority_queue<Edge, vector<Edge>, greater<Edge>> que;
+	que.push(Edge{ -1, 0, 0 });
+
+	while(!que.empty())
+	{
+		Edge e = que.top(); que.pop();
+		if(used[e.to]) continue;
+		if(e.from >= 0) res.push_back(e);
+		sum += e.cost;
+		used[e.to] = true;
+		for(Edge i : g[e.to])
+		{
+			if(!used[i.to]) que.push(i);
+		}
+	}
+	return make_pair(sum, res);
+}
+$end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

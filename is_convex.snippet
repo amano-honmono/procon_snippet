@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>is_convex</Title>
+			<Shortcut>IsConvex</Shortcut>
+		</Header>
+		<Snippet>
+
+			<Code Language="cpp">
+        <![CDATA[bool is_convex(Polygon p)
+{
+  int n = p.size();
+  bool f = true;
+  REP(i, n)
+  {
+    if (ccw(p[i], p[(i + 1) % n], p[(i + 2) % n]) > 0) f = false;
+  }
+  if(f) return true;
+  f = true;
+  REP(j, n)
+  {
+    int i = n - j - 1;
+    if (ccw(p[i], p[(i + 1) % n], p[(i + 2) % n]) > 0) f = false;
+  }
+  return f;
+}
+      $end$ ]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

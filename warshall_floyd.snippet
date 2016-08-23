@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title> warshall-floyd</Title>
+			<Shortcut> WarshallFloyd</Shortcut>
+		</Header>
+		<Snippet>
+      <Declarations>
+        <Literal>
+          <ID>dist</ID>
+          <Default>dist</Default>
+        </Literal>
+        <Literal>
+          <ID>V</ID>
+          <Default>n</Default>
+        </Literal>
+      </Declarations>
+			<Code Language="cpp"><![CDATA[REP(k, $V$)REP(i, $V$)REP(j, $V$) chmin($dist$[i][j],$dist$[i][k]+$dist$[k][j]);
+      $end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

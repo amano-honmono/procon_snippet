@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>power</Title>
+			<Shortcut>Pow</Shortcut>
+		</Header>
+		<Snippet>
+      <Declarations>
+        <Literal>
+          <ID>a</ID>
+          <Default>a</Default>
+        </Literal>
+      </Declarations>
+
+			<Code Language="cpp">
+        <![CDATA[int pow(ll x, ll n,ll mod)
+{
+	ll res = 1;
+	while (n > 0)
+	{
+		if (n & 1) res = res * x % mod;
+		x = x*x%mod;
+		n >>= 1;
+	}
+	return res;
+}
+      $end$ ]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

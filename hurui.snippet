@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>hurui</Title>
+			<Shortcut>Hurui</Shortcut>
+		</Header>
+		<Snippet>
+      <Declarations>
+        <Literal>
+          <ID>N</ID>
+          <Default>1000000</Default>
+        </Literal>
+      </Declarations>
+
+			<Code Language="cpp">
+        <![CDATA[
+const int N = 1111111;
+bool prime[N + 1];
+vector<int> primes;
+
+void hurui()
+{
+	memset(prime, true, sizeof(prime));
+	prime[0] = prime[1] = false;
+	for (int i = 2; i*i < N; i++)
+	{
+		if (!prime[i]) continue;
+		for (int j = i; i*j < N; j++)
+		{
+			prime[i*j] = false;
+		}
+	}
+	REP(i, N + 1)
+	{
+		if (prime[i]) primes.push_back(i);
+	}
+}
+$end$ ]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

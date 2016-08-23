@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>compress</Title>
+			<Shortcut>compress</Shortcut>
+		</Header>
+		<Snippet>
+
+			<Code Language="cpp">
+        <![CDATA[template<class T>
+void compress(vector<T> v,  map<T, int>& zip, vector<T>& unzip)
+{
+	sort(ALL(v));
+	v.erase(unique(ALL(v)), v.end());
+	unzip.resize(v.size());
+	REP(i, v.size())
+	{
+		zip[v[i]] = i;
+		unzip[i] = v[i];
+	}
+}
+      $end$ ]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

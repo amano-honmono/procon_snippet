@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title> mincost_flow</Title>
+			<Shortcut> MincostFlow</Shortcut>
+		</Header>
+		<Snippet>
+      <Declarations>
+        <Literal>
+          <ID>dist</ID>
+          <Default>dist</Default>
+        </Literal>
+        <Literal>
+          <ID>V</ID>
+          <Default>n</Default>
+        </Literal>
+      </Declarations>
+			<Code Language="cpp">
+        <![CDATA[Weight mincost_flow(Graph &g, int s, int t, Flow f)
+{
+  const int n = g.size();
+  Weight res = 0;
+  Array dist(n);
+  vi prevv(n), preve(n);
+  while (f > 0)
+  {
+    REP(i, n) dist[i] = (i == s) ? 0 : INF;
+    bool update = true;
+    while (update)
+    {
+      update = false;
+      for (int v = 0; v < n; v++)
+      {
+        if (dist[v] == INF) continue;
+        REP(i, g[v].size())
+        {
+          Edge& e = g[v][i];
+          if (e.cap > 0 && dist[e.dest] > dist[v] + e.cost)
+          {
+            dist[e.dest] = dist[v] + e.cost;
+            prevv[e.dest] = v;
+            preve[e.dest] = i;
+            update = true;
+          }
+        }
+      }
+    }
+    if (dist[t] == INF) return -1; // cannot flow
+    Flow d = f;
+    for (int v = t; v != s; v = prevv[v])
+    {
+      d = min(d, g[prevv[v]][preve[v]].cap);
+    }
+    f -= d;
+    res += d * dist[t];
+    for (int v = t; v != s; v = prevv[v])
+    {
+      Edge &e = g[prevv[v]][preve[v]];
+      e.cap -= d;
+      g[v][e.rev].cap += d;
+    }
+  }
+  return res;
+}
+      $end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

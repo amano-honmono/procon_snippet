@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>scc</Title>
+			<Shortcut>scc</Shortcut>
+		</Header>
+		<Snippet>
+
+			<Code Language="cpp">
+        <![CDATA[struct Edge { int from, to; };
+typedef vector<Edge> Edges;
+typedef vector<Edges> Graph;
+
+void add_edge(Graph &g, int from, int to) {
+	g[from].push_back(Edge{ from, to });
+}
+
+void dfs(const Graph& g, int v, vector<bool>& used, vi& vs)
+{
+	used[v] = true;
+	for (auto i : g[v])
+	{
+		if (!used[i.to]) dfs(g, i.to, used, vs);
+	}
+	vs.push_back(v);
+}
+
+void rdfs(const Graph& rg, int v, vector<bool>& used, int k, vi& cmp)
+{
+	used[v] = true;
+	cmp[v] = k;
+	for (auto i : rg[v])
+	{
+		if (!used[i.to]) rdfs(rg, i.to, used, k, cmp);
+	}
+}
+
+int strongly_connected_component(Graph graph, vi& cmp)
+{
+	int V = graph.size();
+	Graph g(V), rg(V);
+	vector<bool> used(V);
+	vi vs;
+	cmp.resize(V);
+	REP(i, V)
+	{
+		for (auto e : graph[i])
+		{
+			add_edge(g, i, e.to);
+			add_edge(rg, e.to, i);
+		}
+	}
+	REP(i, V)
+	{
+		if (!used[i]) dfs(g, i, used, vs);
+	}
+	used = vector<bool>(V);
+	reverse(ALL(vs));
+	int k = 0;
+	for (auto i : vs)
+	{
+		if (!used[i]) rdfs(rg, i, used, k++, cmp);
+	}
+	return k;
+}
+
+Graph buildGraph(const Graph& g, const vi& cmp, int K)
+{
+	int V = g.size();
+	vector<set<int>> s(K);
+	Graph res(K);
+	REP(i, V)
+	{
+		for (auto e : g[i]) s[cmp[i]].insert(cmp[e.to]);
+	}
+	REP(i, K)
+	{
+		for (auto j : s[i]) if (i != j) add_edge(res, i, j);
+	}
+	return res;
+}
+      $end$ ]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

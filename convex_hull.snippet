@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>convex_hull</Title>
+			<Shortcut>ConvexHull</Shortcut>
+		</Header>
+		<Snippet>
+
+			<Code Language="cpp"><![CDATA[
+Polygon convex_hull(Polygon s)
+{
+  Polygon u, l;
+  if (s.size() < 3) return s;
+  sort(ALL(s));
+  u.push_back(s[0]);
+  u.push_back(s[1]);
+  l.push_back(s[s.size() - 1]);
+  l.push_back(s[s.size() - 2]);
+  FOR(i, 2, s.size())
+  {
+    for (int n = u.size(); n >= 2 && ccw(u[n - 2], u[n - 1], s[i]) != -1; n--)
+    {
+      u.pop_back();
+    }
+    u.push_back(s[i]);
+  }
+  for (int i = s.size() - 3; i >= 0; i--)
+  {
+    for (int n = l.size(); n >= 2 && ccw(l[n - 2], l[n - 1], s[i]) != -1; n--)
+    {
+      l.pop_back();
+    }
+    l.push_back(s[i]);
+  }
+  for (int i = u.size() - 2; i >= 1; i--) l.push_back(u[i]);
+  return l;
+}
+      $end$ ]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
