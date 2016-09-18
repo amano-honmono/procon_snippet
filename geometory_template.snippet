@@ -25,6 +25,7 @@ namespace std
 struct Line
 {
 	Point a, b;
+  Line() {};
 	Line(Point p, Point q):a(p), b(q) {};
 	Line(ld x1, ld y1, ld x2, ld y2):a(Point(x1, y1)), b(Point(x2, y2)) {};
 };
@@ -32,6 +33,7 @@ struct Line
 struct Circle
 {
 	Point p; ld r;
+  Circle() {};
 	Circle(Point a, ld b):p(a), r(b) {};
 };
 
