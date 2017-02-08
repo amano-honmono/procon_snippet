@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>ndvec</Title>
+      <Shortcut>Ndvec</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="cpp">
+        <![CDATA[template <typename T>
+auto make_ndvec(const size_t length) {
+	return vector<T>(length);
+}
+template <typename T, typename... Rest>
+auto ndvec(const size_t length, const Rest... rest) {
+	auto elem = make_ndvec<T>(rest...);
+	return vector<decltype(elem)>(length, elem);
+}
+      $end$ ]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
