@@ -21,11 +21,27 @@ typedef pair<int, int> pii;
 const int MOD = 1e9 + 7;
 template<class T> T &chmin(T &a, const T &b) { return a = min(a, b); }
 template<class T> T &chmax(T &a, const T &b) { return a = max(a, b); }
-
+template<class T>
+istream& operator>>(istream& is, const vector<T>& v)
+{
+	for (auto &i : v) is >> i;
+	return is;
+}
+template<class T> 
+ostream& operator<<(ostream& os, const vector<T>& v)
+{
+	const string delimiter = "\n";
+	REP(i, v.size())
+	{
+		os << v[i];
+		if (i != v.size() - 1) os << delimiter;
+	}
+	return os;
+}
 /*--------------------template--------------------*/
 
 int main()
-{	
+{
   cin.sync_with_stdio(false); cout << fixed << setprecision(10);
   $end$
   return 0;
