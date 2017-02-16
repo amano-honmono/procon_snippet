@@ -22,13 +22,13 @@ const int MOD = 1e9 + 7;
 template<class T> T &chmin(T &a, const T &b) { return a = min(a, b); }
 template<class T> T &chmax(T &a, const T &b) { return a = max(a, b); }
 template<class T>
-istream& operator>>(istream& is, const vector<T>& v)
+istream& operator>>(istream& is, vector<T>& v)
 {
 	for (auto &i : v) is >> i;
 	return is;
 }
 template<class T> 
-ostream& operator<<(ostream& os, const vector<T>& v)
+ostream& operator<<(ostream& os, vector<T>& v)
 {
 	const string delimiter = "\n";
 	REP(i, v.size())
