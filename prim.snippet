@@ -8,11 +8,11 @@
 		<Snippet>
 
 			<Code Language="cpp">
-        <![CDATA[pair<int, Edges> prim(Graph g)
+        <![CDATA[pair<Weight, Edges> prim(Graph g)
 {
 	vector<bool> used(g.size());
 	Edges res;
-	int sum = 0;
+	Weight sum = 0;
 
 	priority_queue<Edge, vector<Edge>, greater<Edge>> que;
 	que.push(Edge{ -1, 0, 0 });
